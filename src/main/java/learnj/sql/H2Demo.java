@@ -31,19 +31,19 @@ import java.sql.Statement;
  * @brief H2Demo
  */
 public class H2Demo {
-	static final String H2_NAME = "org.h2.Driver";
-	static final String SOURCE_URL = "jdbc:h2:db/mydb";
-	static final String USER = "sa";
-	static final String PASS = "";
+	static final String DB_DIRVER = "org.h2.Driver"; // H2 Driver
+	static final String DB_URL = "jdbc:h2:db/mydb";
+	static final String DB_USER = "sa";
+	static final String DB_PASS = "";
 	
 	public void runInsertDelete() {
 		try {
 			try {
-				Class.forName(H2_NAME);// H2 Driver
+				Class.forName(DB_DIRVER);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			Connection conn = DriverManager.getConnection(SOURCE_URL, USER, PASS);
+			Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
 			Statement stmt = conn.createStatement();
 			stmt.execute("CREATE TABLE mytable(name VARCHAR(100),sex VARCHAR(10))");
 			stmt.executeUpdate("INSERT INTO mytable VALUES('Steven Stander','male')");
@@ -60,11 +60,11 @@ public class H2Demo {
 	public void query(String SQL) {  
         try {  
             try {  
-                Class.forName(H2_NAME);  
+                Class.forName(DB_DIRVER);  
             } catch (Exception e) {  
                 e.printStackTrace();  
             }  
-            Connection conn = DriverManager.getConnection(SOURCE_URL, USER, PASS);  
+            Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);  
             Statement stmt = conn.createStatement();  
             ResultSet rset = stmt.executeQuery(SQL);  
             while (rset.next()) {  
