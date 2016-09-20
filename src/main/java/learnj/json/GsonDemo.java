@@ -11,6 +11,8 @@ import learnj.json.bean.Group;
 import learnj.json.bean.User;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 
 /**
  * 
@@ -18,6 +20,7 @@ import com.google.gson.Gson;
 public class GsonDemo {
   
   public static void toJson() {
+    System.out.println("[toJson] -------------------");
     Gson gson = new Gson();
     
     Group group = new Group();
@@ -40,10 +43,21 @@ public class GsonDemo {
   }
   
   public static void fromJson() {
+    System.out.println("[fromJson] -------------------");
     String str = "{\"name\":\"jack\",\"id\":20}";
     Gson gson = new Gson();
     User person = gson.fromJson(str, User.class);
     System.out.println(person);
+  }
+
+  public static void parse() {
+    System.out.println("[parse] -------------------");
+    String str = "{\"name\":\"jack\",\"id\":20}";
+    JsonParser parser = new JsonParser();
+    JsonElement obj = parser.parse(str);
+    System.out.println(obj);
+    System.out.println(obj.isJsonObject());
+    System.out.println(obj.isJsonArray());
   }
 
   /**
@@ -52,6 +66,7 @@ public class GsonDemo {
   public static void main(String[] args) {
     toJson();
     fromJson();
+    parse();
   }
 
 }
