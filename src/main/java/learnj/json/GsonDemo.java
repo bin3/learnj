@@ -7,8 +7,8 @@
 
 package learnj.json;
 
-import java.util.ArrayList;
-import java.util.List;
+import learnj.json.bean.Group;
+import learnj.json.bean.User;
 
 import com.google.gson.Gson;
 
@@ -16,62 +16,33 @@ import com.google.gson.Gson;
  * 
  */
 public class GsonDemo {
-  public static class Person {
-
-    private String name;
-    private int age;
-
-    /**
-     * @return the name
-     */
-    public String getName() {
-      return name;
-    }
-
-    /**
-     * @param name the name to set
-     */
-    public void setName(String name) {
-      this.name = name;
-    }
-
-    /**
-     * @return the age
-     */
-    public int getAge() {
-      return age;
-    }
-
-    /**
-     * @param age the age to set
-     */
-    public void setAge(int age) {
-      this.age = age;
-    }
-
-    @Override
-    public String toString() {
-      return name + ":" + age;
-    }
-  }
   
   public static void toJson() {
     Gson gson = new Gson();
-    List<Person> persons = new ArrayList<Person>();
-    for (int i = 0; i < 10; i++) {
-      Person p = new Person();
-      p.setName("name" + i);
-      p.setAge(i * 5);
-      persons.add(p);
-    }
-    String str = gson.toJson(persons);
+    
+    Group group = new Group();
+    group.setId(0);
+    group.setName("admin");
+
+    User guestUser = new User();
+    guestUser.setId(2);
+    guestUser.setName("guest");
+
+    User rootUser = new User();
+    rootUser.setId(3);
+    rootUser.setName("root");
+
+    group.addUser(guestUser);
+    group.addUser(rootUser);
+
+    String str = gson.toJson(group);
     System.out.println(str);
   }
   
   public static void fromJson() {
-    String str = "{\"name\":\"name0\",\"age\":0}";
+    String str = "{\"name\":\"jack\",\"id\":20}";
     Gson gson = new Gson();
-    Person person = gson.fromJson(str, Person.class);
+    User person = gson.fromJson(str, User.class);
     System.out.println(person);
   }
 
