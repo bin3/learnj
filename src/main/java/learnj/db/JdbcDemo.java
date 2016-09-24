@@ -12,6 +12,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * 
@@ -53,7 +56,12 @@ public class JdbcDemo {
   }
 
   public static boolean insert(Statement stmt) {
-    String sql = "insert into student(no,name) values('2012001','陶伟基')";
+    Date date = new Date();
+    SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMddHHmmss");
+    String no = fmt.format(date);
+    long id = Math.round(Math.random() * 10000);
+    String name = "user" + id;
+    String sql = String.format("insert into student(no,name) values('%s', '%s')", no, name);
     try {
       int result = stmt.executeUpdate(sql);
       return result != -1;
@@ -82,7 +90,7 @@ public class JdbcDemo {
 
     Connection conn = connect();
     Statement stmt = conn.createStatement();
-    create(stmt);
+//    create(stmt);
     insert(stmt);
     select(stmt);
     conn.close();
