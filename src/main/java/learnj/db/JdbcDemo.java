@@ -9,11 +9,11 @@ package learnj.db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -54,16 +54,38 @@ public class JdbcDemo {
     }
     return false;
   }
+  
+  public static String genNo() {
+    Date date = new Date();
+    SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMddHHmmss.SSS");
+    return fmt.format(date);
+  }
+
+  public static String genName() {
+    long id = Math.round(Math.random() * 10000);
+    return "user" + id;
+  }
 
   public static boolean insert(Statement stmt) {
-    Date date = new Date();
-    SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMddHHmmss");
-    String no = fmt.format(date);
-    long id = Math.round(Math.random() * 10000);
-    String name = "user" + id;
+    String no = genNo();
+    String name = genName();
     String sql = String.format("insert into student(no,name) values('%s', '%s')", no, name);
     try {
       int result = stmt.executeUpdate(sql);
+      return result != -1;
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return false;
+  }
+
+  public static boolean safeInsert(Connection conn) {
+    try {
+      String sql = "insert into student(no,name) values(?, ?)";
+      PreparedStatement stmt = conn.prepareStatement(sql);
+      stmt.setString(1, genNo());
+      stmt.setString(2, genName());
+      int result = stmt.executeUpdate();
       return result != -1;
     } catch (SQLException e) {
       e.printStackTrace();
@@ -92,6 +114,7 @@ public class JdbcDemo {
     Statement stmt = conn.createStatement();
 //    create(stmt);
     insert(stmt);
+    safeInsert(conn);
     select(stmt);
     conn.close();
   }
