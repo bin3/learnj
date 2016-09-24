@@ -15,24 +15,43 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * 
  */
 public class JdbcDemo {
 
+  public static String buildQuery(Map<String, String> params) {
+    StringBuffer sb = new StringBuffer();
+    for (Entry<String, String> entry : params.entrySet()) {
+      if (sb.length() > 0) {
+        sb.append("&");
+      }
+      sb.append(entry.getKey());
+      sb.append("=");
+      sb.append(entry.getValue());
+    }
+    return sb.toString();
+  }
+
   public static Connection connect() {
     String host = "devdb.benbun.com";
     String port = "3306";
-    String username = "root";
-    String password = "7_CiRzkJmBicZpje";
     String database = "test";
 
-    String url =
-        String
-            .format(
-                "jdbc:mysql://%s:%s/%s?user=%s&password=%s&useUnicode=true&characterEncoding=UTF8&serverTimezone=UTC&useSSL=false",
-                host, port, database, username, password);
+    Map<String, String> params = new HashMap<String, String>();
+    params.put("user", "root");
+    params.put("password", "7_CiRzkJmBicZpje");
+    params.put("useUnicode", "true");
+    params.put("characterEncoding", "UTF8");
+    params.put("serverTimezone", "UTC");
+    params.put("useSSL", "false");
+    String query = buildQuery(params);
+
+    String url = String.format("jdbc:mysql://%s:%s/%s?%s", host, port, database, query);
 
     Connection conn;
     try {
@@ -56,7 +75,7 @@ public class JdbcDemo {
     }
     return false;
   }
-  
+
   public static String genNo() {
     Date date = new Date();
     SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMddHHmmss.SSS");
@@ -114,7 +133,7 @@ public class JdbcDemo {
 
     Connection conn = connect();
     Statement stmt = conn.createStatement();
-//    create(stmt);
+    // create(stmt);
     insert(stmt);
     safeInsert(conn);
     select(stmt);
