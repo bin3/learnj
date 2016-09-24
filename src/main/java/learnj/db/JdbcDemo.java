@@ -48,7 +48,9 @@ public class JdbcDemo {
     String sql = "create table student(no char(20),name varchar(20),primary key(no))";
     try {
       int result = stmt.executeUpdate(sql);
-      return result != -1;
+      System.out.println("result: " + result);
+      // create table成功返回0
+      return result == 0;
     } catch (SQLException e) {
       e.printStackTrace();
     }
@@ -72,7 +74,7 @@ public class JdbcDemo {
     String sql = String.format("insert into student(no,name) values('%s', '%s')", no, name);
     try {
       int result = stmt.executeUpdate(sql);
-      return result != -1;
+      return result > 0;
     } catch (SQLException e) {
       e.printStackTrace();
     }
@@ -86,7 +88,7 @@ public class JdbcDemo {
       stmt.setString(1, genNo());
       stmt.setString(2, genName());
       int result = stmt.executeUpdate();
-      return result != -1;
+      return result > 0;
     } catch (SQLException e) {
       e.printStackTrace();
     }
